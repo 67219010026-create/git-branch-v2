@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรไฟล์ผู้สมัคร - IT เทคนิคเลย</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-pink: #e91e63;
+            --dark-pink: #c2185b;
+            --light-pink: #fce4ec;
+            --sidebar-width: 260px;
+            --bg-gray: #f0f2f5;
+            --text-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar (เมนูซ้าย) */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            position: fixed;
+            height: 100%;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-box {
+            padding: 25px 20px;
+            background: linear-gradient(135deg, var(--primary-pink), #ff80ab);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-list {
+            padding: 20px 0;
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #666;
+            text-decoration: none;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: var(--light-pink);
+            color: var(--primary-pink);
+            border-left-color: var(--primary-pink);
+        }
+
+        .logout-btn {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .logout-btn a {
+            display: block;
+            text-align: center;
+            background: #eee;
+            color: #555;
+            padding: 10px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logout-btn a:hover {
+            background: #ddd;
+            color: #333;
+        }
+
+        /* Main Content (เนื้อหาขวา) */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 30px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h2 {
+            font-size: 1.5rem;
+            color: var(--dark-pink);
+        }
+
+        .welcome-text p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Status Timeline Card */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            color: var(--primary-pink);
+        }
+
+        /* Timeline Styles */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #eee;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-icon {
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            color: #aaa;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step.active .step-icon {
+            background: var(--primary-pink);
+            color: white;
+            box-shadow: 0 0 0 5px var(--light-pink);
+        }
+
+        .step.completed .step-icon {
+            background: #4caf50; /* สีเขียว */
+            color: white;
+        }
+
+        .step-text {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .step.active .step-text {
+            color: var(--primary-pink);
+            font-weight: bold;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Profile Card Header */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            background: #ddd;
+            border-radius: 50%;
+            background-image: url('https://via.placeholder.com/150');
+            background-size: cover;
+            border: 4px solid var(--light-pink);
+        }
+
+        .btn-print {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-print:hover {
+            background: var(--dark-pink);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px; /* ย่อ Sidebar */
+            }
+            .brand-box span, .menu-item span, .welcome-text p {
+                display: none; /* ซ่อนข้อความ */
+            }
+            .brand-box, .menu-item {
+                justify-content: center;
+                padding: 20px 0;
+            }
+            .menu-item i {
+                margin: 0;
+                font-size: 1.2rem;
+            }
+            .main-content {
+                margin-left: 70px;
+            }
+            .timeline::before { display: none; } /* ซ่อนเส้น Timeline บนมือถือ */
+            .timeline { flex-direction: column; gap: 15px; }
+            .step { display: flex; align-items: center; gap: 15px; text-align: left; }
+            .step-icon { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="brand-box">
+            <i class="fas fa-laptop-code"></i> <span>IT Admission</span>
+        </div>
+        <div class="menu-list">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-user"></i> <span>ข้อมูลส่วนตัว</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-tasks"></i> <span>สถานะการสมัคร</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-bullhorn"></i> <span>ประกาศรายชื่อ</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-edit"></i> <span>แก้ไขข้อมูล</span>
+            </a>
+        </div>
+        <div class="logout-btn">
+            <a href="login.html" onclick="return confirm('ยืนยันการออกจากระบบ?')">
+                <i class="fas fa-sign-out-alt"></i> <span style="display: inline;">ออกจากระบบ</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        
+        <div class="header">
+            <div class="welcome-text">
+                <h2>ยินดีต้อนรับ, นายสมชาย รักเรียน</h2>
+                <p>ผู้สมัครระดับ ปวส. แผนกวิชาเทคโนโลยีสารสนเทศ</p>
+            </div>
+            <div class="user-status">
+                <span style="background: #e3f2fd; color: #1976d2; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">
+                    <i class="fas fa-circle" style="font-size: 8px;"></i> สถานะ: รอตรวจสอบเอกสาร
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">ขั้นตอนการดำเนินการ</h3>
+            <div class="timeline">
+                <div class="step completed">
+                    <div class="step-icon"><i class="fas fa-check"></i></div>
+                    <div class="step-text">ลงทะเบียน/กรอกข้อมูล</div>
+                </div>
+                <div class="step active">
+                    <div class="step-icon">2</div>
+                    <div class="step-text">ตรวจสอบเอกสาร</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <div class="step-text">ประกาศรายชื่อสอบ</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">4</div>
+                    <div class="step-text">สอบสัมภาษณ์</div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">5</div>
+                    <div class="step-text">รายงานตัว/มอบตัว</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 class="card-title" style="margin-bottom: 0; border: none;">ข้อมูลผู้สมัคร</h3>
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fas fa-print"></i> พิมพ์ใบสมัคร
+                </button>
+            </div>
+            
+            <div class="profile-header" style="margin-bottom: 30px;">
+                <div class="profile-pic" style="background-image: url('https://cdn-icons-png.flaticon.com/512/3135/3135715.png');"></div>
+                <div>
+                    <h4 style="font-size: 1.2rem;">นายสมชาย รักเรียน</h4>
+                    <p style="color: #777;">รหัสผู้สมัคร: <strong>67-IT-001</strong></p>
+                    <p style="color: #777;">วุฒิการศึกษาเดิม: <strong>ปวช. คอมพิวเตอร์ธุรกิจ</strong></p>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 25px;">
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">เลขบัตรประชาชน</div>
+                    <div class="info-value">1-4200-XXXXX-XX-X</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">วันเกิด</div>
+                    <div class="info-value">12 มกราคม 2548</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">เบอร์โทรศัพท์</div>
+                    <div class="info-value">089-999-9999</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">อีเมล</div>
+                    <div class="info-value">somchai.it@gmail.com</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">เกรดเฉลี่ย (GPA)</div>
+                    <div class="info-value">3.50</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">ที่อยู่ปัจจุบัน</div>
+                    <div class="info-value">123 ต.กุดป่อง อ.เมือง จ.เลย 42000</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">สถานะเอกสารประกอบการสมัคร</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f9f9f9;">
+                    <span><i class="fas fa-image" style="color: var(--primary-pink); margin-right: 10px;"></i> รูปถ่ายหน้าตรง</span>
+                    <span style="color: #4caf50;"><i class="fas fa-check-circle"></i> อัปโหลดแล้ว</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f9f9f9;">
+                    <span><i class="fas fa-file-pdf" style="color: var(--primary-pink); margin-right: 10px;"></i> ระเบียนแสดงผลการเรียน (ปพ.1)</span>
+                    <span style="color: #ff9800;"><i class="fas fa-clock"></i> รอเจ้าหน้าที่ตรวจสอบ</span>
+                </li>
+                <li style="display: flex; justify-content: space-between; padding: 10px 0;">
+                    <span><i class="fas fa-id-card" style="color: var(--primary-pink); margin-right: 10px;"></i> สำเนาบัตรประชาชน</span>
+                    <span style="color: #f44336;"><i class="fas fa-times-circle"></i> ยังไม่อัปโหลด</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
